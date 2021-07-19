@@ -63,7 +63,7 @@ class categoryController extends Controller
      */
     public function show($id)
     {
-        //
+      
     }
 
     /**
@@ -74,7 +74,8 @@ class categoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $row = category::findOrFail($id);
+        return view('category.edit', compact('row'));
     }
 
     /**
@@ -86,7 +87,24 @@ class categoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate(
+            [
+                  'id' => 'bail|required', 
+                  'name' => 'required' 
+                 ], 
+                 [ 
+                'id.required' => 'NIM wajib diisi',
+                  'name.required' => 'Nama wajib diisi' 
+                 ]
+                );
+                $row = category::findOrFail($id); 
+                $row->update([ 
+                'id' => $request->id, 
+                'name' => $request->name,
+                'text' => $request->text,
+                ]);
+                return redirect('category');
+    
     }
 
     /**
@@ -97,6 +115,8 @@ class categoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $row = category::findOrFail($id);
+        $row->delete();
+        return redirect('category');
     }
 }
